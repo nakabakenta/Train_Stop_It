@@ -23,15 +23,7 @@ public class TrainBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(nowMoveSpeed <= 0.0f)
-        {
-            for (int i = 0; i < rigidbodies.Length; i++)
-            {
-                rigidbodies[i].useGravity = true;
-            }
-        }
-
-        if(this.transform.position.z > 250.0f)
+        if(this.transform.position.z > 500.0f)
         {
             
         }
@@ -39,5 +31,8 @@ public class TrainBase : MonoBehaviour
         {
             this.transform.position += nowMoveSpeed * transform.forward * Time.deltaTime;//
         }
+
+        // コンソールに表示（デバッグ用）
+        Debug.Log("Speed: " + (int)nowMoveSpeed * 3.6f + " km/h");
     }
 }

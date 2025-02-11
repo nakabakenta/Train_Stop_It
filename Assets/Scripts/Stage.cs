@@ -24,7 +24,7 @@ public class Stage : MonoBehaviour
         {
             gameClear.SetActive(true);
         }
-        else if(trainTransform.position.z > 100.0f)
+        else if(trainTransform.position.z > 0.0f)
         {
             gameOver.SetActive(true);
         }
