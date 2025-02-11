@@ -31,7 +31,7 @@ public class TrainBase : MonoBehaviour
             }
         }
 
-        if(this.transform.position.z > 100.0f)
+        if(this.transform.position.z > 250.0f)
         {
             
         }
