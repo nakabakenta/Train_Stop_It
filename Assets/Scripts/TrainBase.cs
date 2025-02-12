@@ -27,7 +27,7 @@ public class TrainBase : MonoBehaviour
         {
             Move();
         }
-        else if(GameManager.nowScene == "Stage1")
+        else
         {
             if (Stage.departure == true)
             {
