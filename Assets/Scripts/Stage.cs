@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Stage : SceneBase
 {
@@ -22,8 +22,7 @@ public class Stage : SceneBase
     // Start is called before the first frame update
     void Start()
     {
-        LoadScene();
-
+        GameManager.nowScene = SceneManager.GetActiveScene().name;
         tMPTextMoveSpeed = gameObjectMoveSpeed.GetComponent<TMP_Text>();
 
         departure = false;

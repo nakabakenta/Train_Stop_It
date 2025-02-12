@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
-public class TitleButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler
+public class TitleButton : ButtonBase, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public static string selectButton;//選択しているボタン
-    private Button button;
+
     private string[] buttonName
         = new string[6] { "Button_Stage1", "Button_Stage2", "Button_Stage3", "Button_Stage4", "Button_Stage5", "Button_Stage6" };
     private string[] StageName
@@ -17,13 +15,19 @@ public class TitleButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHan
     // Start is called before the first frame update
     void Start()
     {
+        GetComponent();
         selectButton = null;
-        button = this.GetComponent<Button>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        gameObjectAlpha.SetActive(false);
         selectButton = button.gameObject.name;//選択しているボタンの名前を入れる
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        gameObjectAlpha.SetActive(true);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -32,7 +36,7 @@ public class TitleButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHan
         {
             if(selectButton == buttonName[i])
             {
-                SceneManager.LoadScene(StageName[i]);
+                LoadScene(StageName[i]);
             }
         } 
     }

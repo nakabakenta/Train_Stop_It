@@ -24,10 +24,4 @@ public class GenerateRail : GenerateBase
             railLength += 1.0f;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
