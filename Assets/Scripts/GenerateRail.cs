@@ -2,29 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rail : MonoBehaviour
+public class GenerateRail : GenerateBase
 {
-    public int generateRail;
-    public GameObject gameObjectRail;
-    private int railLength = 0;
-    private Transform thisTransform;
+    private float railLength = 0.5f;
 
     // Start is called before the first frame update
     void Awake()
     {
-        thisTransform = this.GetComponent<Transform>();
+        GetComponent();
 
-        for (int i = 0; i < generateRail; i++)
+        for (int i = 0; i < generateNumber; i++)
         {
-            Instantiate(gameObjectRail, 
+            Instantiate(gameObjectGenerate, 
                 new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + railLength), 
                 Quaternion.identity, thisTransform);
 
-            Instantiate(gameObjectRail,
+            Instantiate(gameObjectGenerate,
                 new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - railLength),
                 Quaternion.identity, thisTransform);
 
-            railLength += 1;
+            railLength += 1.0f;
         }
     }
 

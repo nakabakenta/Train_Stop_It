@@ -5,7 +5,8 @@ using UnityEngine;
 public class ObjectBase : CharacterBase
 {
     public float objectPower;
-    private bool putObject = false;
+    public static bool putObject = true;
+    private bool input = false;
     //座標
     protected Vector3 worldPosition, viewPortPosition, mousePosition;
 
@@ -18,11 +19,17 @@ public class ObjectBase : CharacterBase
     // Update is called once per frame
     void Update()
     {
-        if (putObject == true)
+        if (Stage.departure == true)
         {
-            rigidBody.useGravity = true;
+            input = true;
         }
-        else
+
+
+        if (input == true)
+        {
+            
+        }
+        else if(input == false)
         {
             //マウスの位置を取得する
             mousePosition = Input.mousePosition;
@@ -34,8 +41,12 @@ public class ObjectBase : CharacterBase
             //ビューポイント座標をワールド座標に変換する
             this.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(viewPortPosition.x, viewPortPosition.y, 10.0f));
 
-            if(Input.GetMouseButtonDown(0))
+            rigidBody.velocity = Vector3.zero;
+
+            if (Input.GetMouseButtonDown(0))
             {
+                input = true;
+                GenerateObject.nowGenerateNumber -= 1;
                 putObject = true;
             }
         }
@@ -44,9 +55,11 @@ public class ObjectBase : CharacterBase
     //当たり判定(OnCollisionEnter)
     public void OnCollisionStay(Collision collision)
     {
-        if (TrainBase.nowMoveSpeed > 0.0f)
+        if (collision.gameObject.tag == "Train")
         {
-            if (collision.gameObject.tag == "Train")
+            rigidBody.AddForce(Vector3.forward * TrainBase.nowMoveSpeed / 2, ForceMode.Impulse);
+
+            if (TrainBase.nowMoveSpeed > 0.0f)
             {
                 TrainBase.nowMoveSpeed -= objectPower;
             }

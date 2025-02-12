@@ -23,16 +23,28 @@ public class TrainBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(this.transform.position.z > 500.0f)
+        if(GameManager.nowScene == "Title")
         {
-            
+            Move();
         }
-        else 
+        else if(GameManager.nowScene == "Stage1")
         {
-            this.transform.position += nowMoveSpeed * transform.forward * Time.deltaTime;//
-        }
+            if (Stage.departure == true)
+            {
+                if (this.transform.position.z > 350.0f)
+                {
 
-        // コンソールに表示（デバッグ用）
-        Debug.Log("Speed: " + (int)nowMoveSpeed * 3.6f + " km/h");
+                }
+                else
+                {
+                    Move();
+                }
+            }
+        }
+    }
+
+    public void Move()
+    {
+        this.transform.position += nowMoveSpeed * transform.forward * Time.deltaTime;
     }
 }
