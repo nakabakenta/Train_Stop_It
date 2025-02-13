@@ -5,23 +5,30 @@ using UnityEngine;
 public class GenerateObject : GenerateBase
 {
     public static int nowGenerateNumber;
+    public static bool boolGenerate;
 
     // Start is called before the first frame update
     void Start()
     {
         GetComponent();
         nowGenerateNumber = generateNumber;
+        boolGenerate = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(nowGenerateNumber > 0 && ObjectBase.putObject == true)
+        Generate();
+    }
+
+    void Generate()
+    {
+        if (nowGenerateNumber > 0 && boolGenerate == true)
         {
             Instantiate(gameObjectGenerate,
-                new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),
-                Quaternion.identity, thisTransform);
-            ObjectBase.putObject = false;
+               new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),
+               Quaternion.identity, thisTransform);
+            boolGenerate = false;
         }
     }
 }

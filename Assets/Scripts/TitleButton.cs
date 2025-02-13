@@ -21,13 +21,13 @@ public class TitleButton : ButtonBase, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        gameObjectAlpha.SetActive(false);
+        ButtonEnter();
         selectButton = button.gameObject.name;//選択しているボタンの名前を入れる
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        gameObjectAlpha.SetActive(true);
+        ButtonExit();
     }
 
     public void OnPointerClick(PointerEventData eventData)

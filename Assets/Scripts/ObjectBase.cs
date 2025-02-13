@@ -5,8 +5,8 @@ using UnityEngine;
 public class ObjectBase : CharacterBase
 {
     public float objectPower;
-    public static bool putObject = true;
-    private bool input = false;
+    public AudioClip sEObject;
+    private bool input;
     //ç¿ïW
     protected Vector3 worldPosition, viewPortPosition, mousePosition;
 
@@ -14,20 +14,21 @@ public class ObjectBase : CharacterBase
     void Start()
     {
         GetComponent();
+        boxCollider.isTrigger = true;
+        input = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Stage.departure == true)
+        if (Stage.nowWaitTimer <= 0.0f)
         {
             input = true;
         }
 
-
         if (input == true)
         {
-            
+            boxCollider.isTrigger = false;
         }
         else if(input == false)
         {
@@ -47,7 +48,7 @@ public class ObjectBase : CharacterBase
             {
                 input = true;
                 GenerateObject.nowGenerateNumber -= 1;
-                putObject = true;
+                GenerateObject.boolGenerate = true;
             }
         }
     }
@@ -62,6 +63,7 @@ public class ObjectBase : CharacterBase
             if (TrainBase.nowMoveSpeed > 0.0f)
             {
                 TrainBase.nowMoveSpeed -= objectPower;
+                audioSource.PlayOneShot(sEObject);
             }
         }
     }

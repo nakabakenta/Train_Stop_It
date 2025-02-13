@@ -16,9 +16,19 @@ public class ButtonBase : MonoBehaviour
         gameObjectAlpha = transformAlpha?.gameObject;
     }
 
+    public void ButtonEnter()
+    {
+        gameObjectAlpha.SetActive(false);
+    }
+
+    public void ButtonExit()
+    {
+        gameObjectAlpha.SetActive(true);
+    }
+
     public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
-        GameManager.nowScene = SceneManager.GetActiveScene().name;
+        GameManager.nowScene = sceneName;
+        SceneManager.LoadScene(GameManager.nowScene);
     }
 }

@@ -2,33 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement;
 
-public class Stage : SceneBase
+public class Stage : MonoBehaviour
 {
     public float waitTimer;
-    public static bool departure;
-    public GameObject trainStopIt;
-    public GameObject gameClear;
-    public GameObject gameOver;
-    public GameObject gameObjectMoveSpeed;
+    public static float nowWaitTimer;
+    public static float waitInterval = 1.0f;
+    public GameObject[] gameObjectUI = new GameObject[2];
+    public GameObject[] gameObjectUIStage = new GameObject[2];
+    public GameObject[] gameObjectUIStatus = new GameObject[2];
     public GameObject lastTrain;
-    public TMP_Text remainTime;
-    public TMP_Text remainObject;
-    public TMP_Text remainRange;
-    private TMP_Text tMPTextMoveSpeed;
-    private float waitInterval;
+    public TMP_Text[] tMPText = new TMP_Text[4];
+    private bool boolUIResult;
+
+    void Awake()
+    {
+        nowWaitTimer = waitTimer;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.nowScene = SceneManager.GetActiveScene().name;
-        tMPTextMoveSpeed = gameObjectMoveSpeed.GetComponent<TMP_Text>();
-
-        departure = false;
-        gameClear.SetActive(false);
-        gameOver.SetActive(false);
-        gameObjectMoveSpeed.SetActive(false);
+        gameObjectUI[1].SetActive(false);
+        gameObjectUIStage[1].SetActive(false);
+        gameObjectUIStatus[0].SetActive(false);
+        gameObjectUIStatus[1].SetActive(false);
+        boolUIResult = false;
     }
 
     // Update is called once per frame
@@ -37,34 +36,48 @@ public class Stage : SceneBase
         if(lastTrain.transform.position.z < 0.0f)
         {
             int intRemainRange = (int)lastTrain.transform.position.z * -1;
-            remainRange.text = intRemainRange.ToString() + "m";
+
+            if (intRemainRange < 10)
+            {
+                tMPText[2].text = "00" + intRemainRange.ToString() + "m";
+            }
+            else if (intRemainRange < 100)
+            {
+                tMPText[2].text = "0" + intRemainRange.ToString() + "m";
+            }
+            else if (intRemainRange < 1000)
+            {
+                tMPText[2].text = intRemainRange.ToString() + "m";
+            }
         }
 
-        if (waitTimer > waitInterval)
+        if (nowWaitTimer > waitInterval)
         {
-            Stop();
+            GamePreparation();
         }
-        else if (waitTimer <= waitInterval)
+        else if (nowWaitTimer <= waitInterval)
         {
-            departure = true;
-        }
-
-        if (departure == true)
-        {
-            Departure();
+            GameStart();
         }
 
-        remainObject.text = "~" + GenerateObject.nowGenerateNumber;
+        if(GenerateObject.nowGenerateNumber < 10)
+        {
+            tMPText[0].text = "~0" + GenerateObject.nowGenerateNumber;
+        }
+        else if (GenerateObject.nowGenerateNumber < 100)
+        {
+            tMPText[0].text = "~" + GenerateObject.nowGenerateNumber;
+        }
     }
 
-    void Stop()
+    void GamePreparation()
     {
         string textMinute, textSecond;
 
-        waitTimer -= Time.deltaTime;
+        nowWaitTimer -= Time.deltaTime;
 
-        int minute = (int)waitTimer / 60;
-        int second = (int)waitTimer % 60;
+        int minute = (int)nowWaitTimer / 60;
+        int second = (int)nowWaitTimer % 60;
         //•ª
         if (minute < 10)
         {
@@ -84,24 +97,69 @@ public class Stage : SceneBase
             textSecond = second.ToString();
         }
 
-        remainTime.text = textMinute + ":" + textSecond;
+        tMPText[1].text = textMinute + ":" + textSecond;
     }
 
-    void Departure()
+    void GameStart()
     {
-        trainStopIt.SetActive(false);
-        gameObjectMoveSpeed.SetActive(true);
+        if (nowWaitTimer != waitInterval)
+        {
+            nowWaitTimer = 0.0f;
+        }
+
+        gameObjectUIStage[0].SetActive(false);
+        gameObjectUIStage[1].SetActive(true);
 
         if (TrainBase.nowMoveSpeed <= 0.0f)
         {
-            gameClear.SetActive(true);
+            GameClear();
         }
         else if (lastTrain.transform.position.z >= 0.0f)
         {
-            gameOver.SetActive(true);
+            GameOver();
         }
 
         float nowMoveSpeed = (int)TrainBase.nowMoveSpeed * 3.6f;
-        tMPTextMoveSpeed.text = (int)nowMoveSpeed + "km/h";
+
+        if(nowMoveSpeed < 10)
+        {
+            tMPText[3].text = "00" + (int)nowMoveSpeed + "km/h";
+        }
+        else if (nowMoveSpeed < 100)
+        {
+            tMPText[3].text = "0" + (int)nowMoveSpeed + "km/h";
+        }
+        else if (nowMoveSpeed < 1000)
+        {
+            tMPText[3].text = (int)nowMoveSpeed + "km/h";
+        }
+    }
+
+    void GameClear()
+    {
+        gameObjectUIStatus[0].SetActive(true);
+
+        if (boolUIResult == false)
+        {
+            boolUIResult = true;
+            Invoke("UIResult", 3.0f);
+        }
+    }
+
+    void GameOver()
+    {
+        gameObjectUIStatus[1].SetActive(true);
+
+        if (boolUIResult == false)
+        {
+            boolUIResult = true;
+            Invoke("UIResult", 3.0f);
+        }
+    }
+
+    void UIResult()
+    {
+        gameObjectUI[0].SetActive(false);
+        gameObjectUI[1].SetActive(true);
     }
 }
